@@ -1,0 +1,43 @@
+{
+  "name": "ng-xtorage-expiration",
+  "main": "ng-xtorage-expiration.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ericmdantas/ng-xtorage-expiration",
+  "authors": [
+    "ericmdantas <ericdantas0@hotmail.com>"
+  ],
+  "description": "Web Storage made simple and more powerful (sessionStorage & localStorage)",
+  "keywords": [
+    "storage",
+    "web-storage",
+    "angular-storage",
+    "angular-xtorage",
+    "ng-xtorage",
+    "sessionStorage",
+    "localStorage"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    ".idea",
+    ".gitignore",
+    "node_modules",
+    "LICENSE",
+    "bower_components",
+    "coverage",
+    "grunfile.js",
+    "package.json",
+    "*.conf.js",
+    "*_test.js"
+  ],
+  "dependencies": {
+    "angular": ">=1.0.8",
+    "ng-xtorage": "~1.1.1"
+  },
+  "devDependencies": {
+    "angular-mocks": ">=1.0.8"
+  },
+  "resolutions": {
+    "angular": "1.3.14"
+  }
+}
