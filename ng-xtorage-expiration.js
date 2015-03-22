@@ -20,8 +20,9 @@
                 {
                     $interval(function()
                     {
-                        $delegate
-                            .getFromLocalStorage(EXPIRATION_KEY)
+                        var _fromStorage = $delegate.getFromLocalStorage(EXPIRATION_KEY);
+
+                        _fromStorage
                             .filter(function(toExpire)
                             {
                                 return $xpirationChecker.timeToExpire(toExpire);
@@ -30,7 +31,17 @@
                             {
                                 $delegate.removeFromLocalStorage(toExpire.key);
                                 $delegate.removeFromSessionStorage(toExpire.key);
+
+                                _fromStorage
+                                    .forEach(function(obj, index)
+                                    {
+                                        if (obj && (obj.key === toExpire.key))
+                                        {
+                                            $delegate.removeFromArrayLocalStorage(EXPIRATION_KEY, index);
+                                        };
+                                    });
                             });
+
 
                     }, CHECK_EXPIRATION);
                 };

@@ -138,6 +138,26 @@ describe('ng-xtorage-expiration', function()
 
                 expect(_xtorage.get(_keys)).toBeNull();
             })
+
+            it('should expire the content and remove the object from $xpiration', function()
+            {
+                var _key = 'a';
+                var _info = true;
+
+                _xtorage.save(_key, _info);
+
+                expect(_xtorage.get(_key)).toBe(true);
+                expect(typeof _xtorage.get(_key)).toBe('boolean');
+
+                _xtorage.expire(_key, 1);
+
+                expect(angular.equals(_xtorage.getFromLocalStorage(EXPIRATION_KEY), [])).toBeFalsy();
+
+                _intervalMock.flush(MAX_FLUSH);
+
+                expect(_xtorage.get(_key)).toBeNull();
+                expect(angular.equals(_xtorage.getFromLocalStorage(EXPIRATION_KEY), [])).toBeTruthy();
+            })
         })
 
         describe('sessionStorage', function()
@@ -240,6 +260,26 @@ describe('ng-xtorage-expiration', function()
                 _intervalMock.flush(MAX_FLUSH);
 
                 expect(_xtorage.get(_keys, {storage: 'sessionStorage'})).toBeNull();
+            })
+
+            it('should expire the content and remove the object from $xpiration', function()
+            {
+                var _key = 'a';
+                var _info = true;
+
+                _xtorage.save(_key, _info, {storage: 'sessionStorage'});
+
+                expect(_xtorage.get(_key, {storage: 'sessionStorage'})).toBe(true);
+                expect(typeof _xtorage.get(_key, {storage: 'sessionStorage'})).toBe('boolean');
+
+                _xtorage.expire(_key, 1);
+
+                expect(angular.equals(_xtorage.getFromLocalStorage(EXPIRATION_KEY), [])).toBeFalsy();
+
+                _intervalMock.flush(MAX_FLUSH);
+
+                expect(_xtorage.get(_key)).toBeNull();
+                expect(angular.equals(_xtorage.getFromLocalStorage(EXPIRATION_KEY), [])).toBeTruthy();
             })
         })
     })
