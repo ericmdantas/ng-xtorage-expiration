@@ -1,7 +1,7 @@
 {
   "name": "ng-xtorage-expiration",
   "main": "ng-xtorage-expiration.js",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/ericmdantas/ng-xtorage-expiration",
   "authors": [
     "ericmdantas <ericdantas0@hotmail.com>"
