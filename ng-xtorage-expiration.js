@@ -4,24 +4,23 @@
 
     ng
         .module('emd.ng-xtorage-expiration', ['emd.ng-xtorage'])
-        .provider('$xtorageExpiration', function()
+        .config(['$xtorageProvider', function($xtorageProvier)
         {
-            var self = this;
-
-            var EXPIRATION_KEY = '$xpiration';
-            var CHECK_EXPIRATION = 1000 * 60; // 1 minute
-
-            self.storageExpiration = 1000 * 60 * 60 * 24; // 1 day
-
-            this.$get = ['$window', '$xtorage', '$xpirationChecker', '$interval', function($window, $xtorage, $xpirationChecker, $interval)
+            $xtorageProvier.unique = true;
+        }])
+        .config(['$provide', function($provide)
+        {
+            $provide.decorator('$xtorage', ['$delegate', '$window', '$interval', '$xpirationChecker', function($delegate, $window, $interval, $xpirationChecker)
             {
-                var DEFAULT_EXPIRATION = self.storageExpiration;
+                var EXPIRATION_KEY = '$xpiration';
+                var CHECK_EXPIRATION = 1000 * 60; // 1 minute
+                var STORAGE_EXPIRATION = 1000 * 60 * 60 * 24; // 1 day;
 
                 var _initInterval = function()
                 {
-                    var _intervalId = $interval(function()
+                    $interval(function()
                     {
-                        $xtorage
+                        $delegate
                             .getFromLocalStorage(EXPIRATION_KEY)
                             .filter(function(toExpire)
                             {
@@ -29,41 +28,44 @@
                             })
                             .forEach(function(toExpire)
                             {
-                                $xtorage.removeFromLocalStorage(toExpire.key);
-                                $xtorage.removeFromSessionStorage(toExpire.key);
-
-                                $interval.cancel(_intervalId);
-                            })
+                                $delegate.removeFromLocalStorage(toExpire.key);
+                                $delegate.removeFromSessionStorage(toExpire.key);
+                            });
 
                     }, CHECK_EXPIRATION);
                 };
 
-                var _registerExpiration = function(key, expiration)
+                var _expire = function(key, expiration)
                 {
-                    var _expiration = expiration || DEFAULT_EXPIRATION;
+                    var _expiration = expiration || STORAGE_EXPIRATION;
 
                     var _expirationObject = {};
 
                     _expirationObject.key = key;
                     _expirationObject.expire = $window.Date.now() + _expiration;
 
-                    $xtorage.pushIntoLocalStorage(EXPIRATION_KEY, _expirationObject);
+                    $delegate.pushIntoLocalStorage(EXPIRATION_KEY, _expirationObject);
 
                     _initInterval();
+                };
+
+                $delegate.expire = _expire;
+
+                return $delegate;
+            }]);
+        }])
+        .provider('$xpirationChecker', function()
+        {
+            this.storageExpiration = 1000 * 60 * 60 * 24; // 1 day
+
+            this.$get = ['$window', function($window)
+            {
+                var _timeToExpire = function(toExpire)
+                {
+                    return $window.Date.now() >= toExpire.expire;
                 }
 
-                return {
-                            registerExpiration: _registerExpiration
-                       }
+                return {timeToExpire: _timeToExpire};
             }];
-        })
-        .service('$xpirationChecker', ['$window', function($window)
-        {
-            var _timeToExpire = function(toExpire)
-            {
-                return $window.Date.now() >= toExpire.expire;
-            }
-
-            this.timeToExpire = _timeToExpire;
-        }]);
+        });
 }(angular))

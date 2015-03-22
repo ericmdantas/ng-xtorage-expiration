@@ -2,7 +2,7 @@
 
 describe('ng-xtorage-expiration', function()
 {
-    var _xtorage, _xtorageExpiration, _windowMock, _xtorageProvider, _intervalMock, _xpirationChecker;
+    var _xtorage, _xtorageExpiration, _windowMock, _xtorageProvider, _intervalMock, _xpirationChecker, _xtorageExpirationTimeChecker;
     var MAX_FLUSH = 9999 * 10;
     var EXPIRE_IN = 1000;
     var EXPIRATION_KEY = '$xpiration';
@@ -18,7 +18,7 @@ describe('ng-xtorage-expiration', function()
     {
         _windowMock = $injector.get('$window');
         _xtorage = $injector.get('$xtorage');
-        _xtorageExpiration = $injector.get('$xtorageExpiration');
+        _xtorageExpiration = $injector.get('$xtorage');
         _intervalMock = $injector.get('$interval');
         _xpirationChecker = $injector.get('$xpirationChecker');
 
@@ -50,7 +50,7 @@ describe('ng-xtorage-expiration', function()
                 expect(_xtorage.get(_key)).toBe(true);
                 expect(typeof _xtorage.get(_key)).toBe('boolean');
 
-                _xtorageExpiration.registerExpiration(_key, 1);
+                _xtorage.expire(_key, 1);
 
                 _intervalMock.flush(MAX_FLUSH);
 
@@ -68,7 +68,7 @@ describe('ng-xtorage-expiration', function()
                 expect(typeof _xtorage.get(_key)).toBe('boolean');
                 expect(_windowMock.localStorage.getItem(EXPIRATION_KEY)).toBeDefined();
 
-                _xtorageExpiration.registerExpiration(_key, 1);
+                _xtorage.expire(_key, 1);
 
                 _intervalMock.flush(MAX_FLUSH);
 
@@ -97,7 +97,7 @@ describe('ng-xtorage-expiration', function()
                 _keys
                     .forEach(function(k)
                     {
-                        _xtorageExpiration.registerExpiration(k, 1);
+                        _xtorage.expire(k, 1);
                     })
 
                 _intervalMock.flush(MAX_FLUSH);
@@ -127,7 +127,7 @@ describe('ng-xtorage-expiration', function()
                 _keys
                     .forEach(function(k)
                     {
-                        _xtorageExpiration.registerExpiration(k, 1);
+                        _xtorage.expire(k, 1);
                     })
 
                 _intervalMock.flush(1234);
@@ -152,7 +152,7 @@ describe('ng-xtorage-expiration', function()
                 expect(_xtorage.get(_key, {storage: 'sessionStorage'})).toBe(true);
                 expect(typeof _xtorage.get(_key, {storage: 'sessionStorage'})).toBe('boolean');
 
-                _xtorageExpiration.registerExpiration(_key, 1);
+                _xtorage.expire(_key, 1);
 
                 _intervalMock.flush(MAX_FLUSH);
 
@@ -170,7 +170,7 @@ describe('ng-xtorage-expiration', function()
                 expect(typeof _xtorage.getFromSessionStorage(_key)).toBe('boolean');
                 expect(_windowMock.localStorage.getItem(EXPIRATION_KEY)).toBeDefined();
 
-                _xtorageExpiration.registerExpiration(_key, 1);
+                _xtorage.expire(_key, 1);
 
                 _intervalMock.flush(MAX_FLUSH);
 
@@ -200,7 +200,7 @@ describe('ng-xtorage-expiration', function()
                 _keys
                     .forEach(function(k)
                     {
-                        _xtorageExpiration.registerExpiration(k, 1);
+                        _xtorage.expire(k, 1);
                     })
 
                 _intervalMock.flush(MAX_FLUSH);
@@ -230,7 +230,7 @@ describe('ng-xtorage-expiration', function()
                 _keys
                     .forEach(function(k)
                     {
-                        _xtorageExpiration.registerExpiration(k);
+                        _xtorage.expire(k);
                     })
 
                 _intervalMock.flush(1234);

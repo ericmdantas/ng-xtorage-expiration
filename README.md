@@ -8,7 +8,11 @@ Web Storage made simple and more powerful (sessionStorage & localStorage).
 
 # installation
 
-```$ bower install ng-xtorage-expiration --save```
+```
+
+$ bower install ng-xtorage-expiration --save
+
+```
 
 
 # disclaimer
