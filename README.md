@@ -17,7 +17,7 @@ $ bower install ng-xtorage-expiration --save
 
 # api
 
-By having ```emd.ng-xtorage-expiration``` as a dependency in your AngularJS module, you'll have access to a new function inside ```$xtorage```: ```expire```.
+By having ```emd.ng-xtorage-expiration``` as a dependency in your AngularJS module, you'll have access to a new function inside ```$xtorage```: ```expire```. 
 
 
 # $xtorage.expire(key, expirationTime)
@@ -58,6 +58,11 @@ angular
   })
 
 ```
+
+# $xtorage
+
+[Check $xtorage full API](https://github.com/ericmdantas/ng-xtorage#ng-xtorage);
+
 
 #LICENSE
 
